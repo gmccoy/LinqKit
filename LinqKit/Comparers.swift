@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
+/*
 func compare<T : Comparable>(a:T, b:T) -> Int {
     return a == b
         ? 0
@@ -29,3 +29,4 @@ func caseInsensitiveComparer (a:String,b:String) -> Bool {
 func compareIgnoreCase (a:String,b:String) -> Int {
     return a.uppercaseString.compare(b.uppercaseString)
 }
+*/

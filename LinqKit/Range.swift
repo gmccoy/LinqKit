@@ -10,10 +10,10 @@ import Foundation
 
 extension Range {
     
-    func map<T,U>(fn: (T) -> U) -> U[] {
-        var to = U[]()
+    func map<T,U>(fn: (T) -> U) -> [U] {
+        var to = [U]()
         for i in self {
-            to += fn(i as T)
+            to.append(fn(i as! T))
         }
         return to
     }

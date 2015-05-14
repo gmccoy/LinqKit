@@ -95,11 +95,11 @@ class Customer : Printable
     let country: String?
     let phone: String?
     let fax: String?
-    let orders: Order[]
+    let orders: [Order]
     
     init(customerId: String, companyName: String,
         address: String, city: String, region: String?, postalCode: String?, country: String?,
-        phone: String?, fax: String?, orders: Order[])
+        phone: String?, fax: String?, orders: [Order])
     {
         self.customerId = customerId
         self.companyName = companyName
@@ -119,7 +119,7 @@ class Customer : Printable
 }
 
 
-func productsList() -> Product[] {
+func productsList() -> [Product] {
     let products = [
         newProduct(1, "Chai", "Beverages", 18.000, 39),
         newProduct(2, "Chang", "Beverages", 19.000, 17),
@@ -202,49 +202,50 @@ func productsList() -> Product[] {
     return products
 }
 
-var customers : Customer[]?
+var customers : [Customer]?
 
-func customersList() -> Customer[] {
-    if (customers) {
+func customersList() -> [Customer] {
+    if (customers != nil) {
         return customers!
     }
     
     let files = NSFileManager.defaultManager()
-    let jsonData = files.contentsAtPath(NSBundle.mainBundle().pathForResource("customers", ofType: "json"))
-    let rawCustomers = NSJSONSerialization.JSONObjectWithData(jsonData, options:nil, error:nil) as NSDictionary
-    let customersArray = rawCustomers["customers"] as NSArray
+    let jsonData = files.contentsAtPath(NSBundle.mainBundle().pathForResource("customers", ofType: "json")!)!
+    let rawCustomers = NSJSONSerialization.JSONObjectWithData(jsonData, options:nil, error:nil) as! NSDictionary
+    let customersArray = rawCustomers["customers"] as! NSArray
     let fmt = NSNumberFormatter()
     
     var to = Array<Customer>()
     for o : AnyObject in customersArray {
-        let c = o as NSDictionary
+        let c = o as! NSDictionary
         
         func str(key: String) -> String? {
             if let o : AnyObject? = c[key] {
-                return String(o as NSString)
+                return String(o as! NSString)
             }
             return nil
         }
         
-        func createOrders(orders: NSArray?) -> Order[] {
-            var to = Order[]()
-            if orders {
+        func createOrders(orders: NSArray?) -> [Order] {
+            var to = [Order]()
+            if orders != nil {
                 for o: AnyObject in orders! {
-                    let m = o as NSDictionary
+                    let m = o as! NSDictionary
                     var orderDate: NSDate?
                     if let dateStr : AnyObject = m["orderdate"] {
-                        orderDate = NSDate(dateString:dateStr as String, format: "yyyy-MM-dd'T'HH:mm:ss")
+                        orderDate = NSDate(dateString:dateStr as! String, format: "yyyy-MM-dd'T'HH:mm:ss")
                     }
-                    to += Order(
-                        orderId:fmt.numberFromString(m["id"] as String).integerValue,
+                    to.append(Order(
+                        orderId:fmt.numberFromString(m["id"] as! String)!.integerValue,
                         orderDate:orderDate,
-                        total:fmt.numberFromString(m["total"] as String).doubleValue)
+                        total:fmt.numberFromString(m["total"] as! String)!.doubleValue
+                    ))
                 }
             }
             return to
         }
         
-        to += Customer(
+        to.append(Customer(
             customerId: str("id")!,
             companyName: str("name")!,
             address: str("address")!,
@@ -254,8 +255,8 @@ func customersList() -> Customer[] {
             country: str("country"),
             phone: str("phone"),
             fax: str("fax"),
-            orders: createOrders((c["orders"]? as NSDictionary?)?["order"] as NSArray?)
-        )
+            orders: createOrders((c["orders"] as! NSDictionary?)?["order"] as! NSArray?)
+        ))
     }
     
     customers = to

@@ -10,11 +10,11 @@ import Foundation
 
 extension MapCollectionView {
     
-    func map<T,U>(fn: (T) -> (U)) -> U[] {
-        var to = U[]()
+    func map<T,U>(fn: (T) -> (U)) -> [U] {
+        var to = [U]()
         for x in self {
-            let e = x as U
-            to += e
+            let e = fn(x as! T)
+            to.append(e)
         }
         return to
     }

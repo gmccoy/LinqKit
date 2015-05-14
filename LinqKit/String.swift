@@ -9,7 +9,7 @@
 import Foundation
 
 extension String {
-    var length: Int { return countElements(self) }
+    var length: Int { return count(self) }
     
     func contains(s:String) -> Bool {
         return (self as NSString).containsString(s)
@@ -18,7 +18,7 @@ extension String {
     func charAt(index:Int) -> String {
         let c = (self as NSString).characterAtIndex(index)
         let s = NSString(format:"%c",c)
-        return s
+        return s as String
     }
     
     func trim() -> String {

@@ -8,7 +8,7 @@
 
 import Foundation
 
-extension Slice {
+extension ArraySlice {
     func each(fn: (T) -> ()) {
         for i in self {
             fn(i)

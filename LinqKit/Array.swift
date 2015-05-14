@@ -14,7 +14,7 @@ protocol Addable {
 }
 
 protocol Reducable : Addable, Averagable, Comparable {
-    class func max() -> Self
+    static func max() -> Self
 }
 
 protocol Averagable : Addable {
@@ -28,24 +28,24 @@ extension Array {
         }
     }
     
-    func find(fn: (T) -> Bool) -> T[] {
-        var to = T[]()
+    func find(fn: (T) -> Bool) -> [T] {
+        var to = [T]()
         for x in self {
             let t = x as T
             if fn(t) {
-                to += t
+                to.append(t)
             }
         }
         return to
     }
     
-    func find(fn: (T, Int) -> Bool) -> T[] {
-        var to = T[]()
+    func find(fn: (T, Int) -> Bool) -> [T] {
+        var to = [T]()
         var i = 0
         for x in self {
             let t = x as T
             if fn(t, i++) {
-                to += t
+                to.append(t)
             }
         }
         return to
@@ -80,42 +80,41 @@ extension Array {
         return self.find(fn).count == self.count
     }
     
-    func expand<TResult>(fn: (T) -> TResult[]?) -> TResult[] {
-        var to = TResult[]()
+    func expand<TResult>(fn: (T) -> [TResult]) -> [TResult] {
+        var to = [TResult]()
         for x in self {
-            if let result = fn(x as T) {
-                for r in result {
-                    to += r
-                }
+            let result = fn(x as T)
+            for r in result {
+                to.append(r)
             }
         }
         return to
     }
     
-    func take(count:Int) -> T[] {
-        var to = T[]()
+    func take(count:Int) -> [T] {
+        var to = [T]()
         var i = 0
         while i < self.count && i < count {
-            to += self[i++]
+            to.append(self[i++])
         }
         return to
     }
     
-    func skip(count:Int) -> T[] {
-        var to = T[]()
+    func skip(count:Int) -> [T] {
+        var to = [T]()
         var i = count
         while i < self.count {
-            to += self[i++]
+            to.append(self[i++])
         }
         return to
     }
     
-    func takeWhile(fn: (T) -> Bool) -> T[] {
-        var to = T[]()
+    func takeWhile(fn: (T) -> Bool) -> [T] {
+        var to = [T]()
         for x in self {
             let t = x as T
             if fn(t) {
-                to += t
+                to.append(t)
             }
             else {
                 break
@@ -124,8 +123,8 @@ extension Array {
         return to
     }
     
-    func skipWhile(fn: (T) -> Bool) -> T[] {
-        var to = T[]()
+    func skipWhile(fn: (T) -> Bool) -> [T] {
+        var to = [T]()
         var keepSkipping = true
         for x in self {
             let t = x as T
@@ -133,7 +132,7 @@ extension Array {
                 keepSkipping = false
             }
             if !keepSkipping {
-                to += t
+                to.append(t)
             }
         }
         return to
@@ -157,9 +156,9 @@ extension Array {
         return orElse()
     }
     
-    func sortBy(fns: ((T,T) -> Int)...) -> T[]
+    func sortBy(fns: ((T,T) -> Int)...) -> [T]
     {
-        var items = self.copy()
+        var items = self // copy
         items.sort { x, y in
             for f in fns {
                 let r = f(x,y)
@@ -172,12 +171,12 @@ extension Array {
         return items
     }
     
-    func groupBy<Key : Hashable, Item>(fn:(Item) -> Key) -> Group<Key,Item>[] {
-        return self.groupBy(fn, nil, nil)
+    func groupBy<Key : Hashable, Item>(fn:(Item) -> Key) -> [Group<Key,Item>] {
+        return self.groupBy(fn, matchWith: nil, valueAs: nil)
     }
     
-    func groupBy<Key : Hashable, Item>(fn:(Item) -> Key, matchWith:((Key,Key) -> Bool)?) -> Group<Key,Item>[] {
-        return self.groupBy(fn, matchWith, nil)
+    func groupBy<Key : Hashable, Item>(fn:(Item) -> Key, matchWith:((Key,Key) -> Bool)?) -> [Group<Key,Item>] {
+        return self.groupBy(fn, matchWith: matchWith, valueAs: nil)
     }
     
     func groupBy<Key : Hashable, Item>
@@ -186,17 +185,17 @@ extension Array {
         matchWith: ((Key,Key) -> Bool)?,
         valueAs:   (Item -> Item)?
         )
-        -> Group<Key,Item>[]
+        -> [Group<Key,Item>]
     {
-        var ret = Item[]()
+        var ret = [Item]()
         var map = Dictionary<Key, Group<Key,Item>>()
         for x in self {
-            var e = x as Item
+            var e = x as! Item
             let val = fn(e)
             
             var key = val as Key
             
-            if matchWith {
+            if matchWith != nil {
                 for k in map.keys {
                     if matchWith!(val, k) {
                         key = k
@@ -205,16 +204,16 @@ extension Array {
                 }
             }
             
-            if valueAs {
+            if valueAs != nil {
                 e = valueAs!(e)
             }
             
-            var group = map[key] ? map[key]! : Group<Key,Item>(key:key)
+            var group = map[key] != nil ? map[key]! : Group<Key,Item>(key:key)
             group.append(e)
             map[key] = group //always copy back struct
         }
         
-        return map.values.map { $0 as Group<Key,Item> }
+        return map.values.array
     }
     
     func contains<T : Equatable>(x:T) -> Bool {
@@ -222,8 +221,8 @@ extension Array {
     }
     
     func indexOf<T : Equatable>(x:T) -> Int? {
-        for i in 0..self.count {
-            if self[i] as T == x {
+        for i in 0...self.count {
+            if self[i] as! T == x {
                 return i
             }
         }
@@ -233,7 +232,7 @@ extension Array {
     func toDictionary<Key : Hashable, Item>(fn:Item -> Key) -> Dictionary<Key,Item> {
         var to = Dictionary<Key,Item>()
         for x in self {
-            let e = x as Item
+            let e = x as! Item
             let key = fn(e)
             to[key] = e
         }
@@ -242,49 +241,49 @@ extension Array {
     
     func sum<T : Addable>() -> T
     {
-        return self.map { $0 as T }.reduce(T()) { $0 + $1 }
+        return self.map { $0 as! T }.reduce(T()) { $0 + $1 }
     }
     
     func sum<U, T : Addable>(fn: (U) -> T) -> T {
-        return self.map { fn($0 as U) }.reduce(T()) { $0 + $1 }
+        return self.map { fn($0 as! U) }.reduce(T()) { $0 + $1 }
     }
     
     func min<T : Reducable>() -> T {
-        return self.map { $0 as T }.reduce(T.max()) { $0 < $1 ? $0 : $1 }
+        return self.map { $0 as! T }.reduce(T.max()) { $0 < $1 ? $0 : $1 }
     }
     
     func min<U, T : Reducable>(fn: (U) -> T) -> T {
-        return self.map { fn($0 as U) }.reduce(T.max()) { $0 < $1 ? $0 : $1 }
+        return self.map { fn($0 as! U) }.reduce(T.max()) { $0 < $1 ? $0 : $1 }
     }
     
     func max<T : Reducable>() -> T {
-        return self.map { $0 as T }.reduce(T()) { $0 > $1 ? $0 : $1 }
+        return self.map { $0 as! T }.reduce(T()) { $0 > $1 ? $0 : $1 }
     }
     
     func max<U, T : Reducable>(fn: (U) -> T) -> T {
-        return self.map { fn($0 as U) }.reduce(T()) { $0 > $1 ? $0 : $1 }
+        return self.map { fn($0 as! U) }.reduce(T()) { $0 > $1 ? $0 : $1 }
     }
     
     func avg<T : Averagable>() -> Double
     {
-        return self.map { $0 as T }.reduce(T()) { $0 + $1 } / self.count
+        return self.map { $0 as! T }.reduce(T()) { $0 + $1 } / self.count
     }
     
     func avg<U, T : Averagable>(fn: (U) -> T) -> Double {
-        return self.map { fn($0 as U) }.reduce(T()) { $0 + $1 } / self.count
+        return self.map { fn($0 as! U) }.reduce(T()) { $0 + $1 } / self.count
     }
 }
 
-func distinct<T : Equatable>(this:T[]) -> T[] {
+func distinct<T : Equatable>(this:[T]) -> [T] {
     return union(this)
 }
 
-func union<T : Equatable>(arrays:T[]...) -> T[] {
+func union<T : Equatable>(arrays:[T]...) -> [T] {
     return _union(arrays)
 }
 
-func _union<T : Equatable>(arrays:T[][]) -> T[] {
-    var to = T[]()
+func _union<T : Equatable>(arrays:[[T]]) -> [T] {
+    var to = [T]()
     for arr in arrays {
         outer: for x in arr {
             let e = x as T
@@ -293,15 +292,15 @@ func _union<T : Equatable>(arrays:T[][]) -> T[] {
                     continue outer
                 }
             }
-            to += e
+            to.append(e)
         }
     }
     return to
 }
 
-func intersection<T : Equatable>(arrays:T[]...) -> T[] {
-    var all: T[] = _union(arrays)
-    var to = T[]()
+func intersection<T : Equatable>(arrays:[T]...) -> [T] {
+    var all: [T] = _union(arrays)
+    var to = [T]()
     
     for x in all {
         var count = 0
@@ -315,19 +314,19 @@ func intersection<T : Equatable>(arrays:T[]...) -> T[] {
             }
         }
         if count == arrays.count {
-            to += e
+            to.append(e)
         }
     }
     
     return to
 }
 
-func difference<T : Equatable>(from:T[], other:T[]...) -> T[] {
-    var to = T[]()
+func difference<T : Equatable>(from:[T], other:[T]...) -> [T] {
+    var to = [T]()
     for arr in other {
         for x in from {
             if !arr.contains(x) && !to.contains(x) {
-                to += x
+                to.append(x)
             }
         }
     }

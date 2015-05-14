@@ -8,9 +8,9 @@
 
 import Foundation
 
-struct Group<Key,Item> : Sequence, Printable {
+struct Group<Key,Item> : Printable {
     let key: Key
-    var items = Item[]()
+    var items = [Item]()
     
     init(key:Key) {
         self.key = key
@@ -20,7 +20,7 @@ struct Group<Key,Item> : Sequence, Printable {
         items.append(item)
     }
     
-    func generate() -> IndexingGenerator<Item[]> {
+    func generate() -> IndexingGenerator<[Item]> {
         return items.generate()
     }
     
@@ -36,7 +36,7 @@ struct Group<Key,Item> : Sequence, Printable {
     }
 }
 
-func join<T,U>(seq:T[], withSeq:U[], match:(T,U)->Bool) -> (T,U)[] {
+func join<T,U>(seq:[T], withSeq:[U], match:(T,U)->Bool) -> [(T,U)] {
     return seq.expand { (x:T) in
         withSeq
             .find { y in match(x,y) }
@@ -44,7 +44,7 @@ func join<T,U>(seq:T[], withSeq:U[], match:(T,U)->Bool) -> (T,U)[] {
     }
 }
 
-func joinGroup<T : Hashable,U>(seq:T[], withSeq:U[], match:(T,U)->Bool) -> Group<T,(T,U)>[] {
+func joinGroup<T : Hashable,U>(seq:[T], withSeq:[U], match:(T,U)->Bool) -> [Group<T,(T,U)>] {
     return join(seq, withSeq, match).groupBy { x -> T in
         let (t,u) = x
         return t

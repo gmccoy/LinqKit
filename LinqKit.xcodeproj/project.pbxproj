@@ -21,7 +21,16 @@
 		51A8ECEB19457E8D0054D280 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECE119457E8D0054D280 /* String.swift */; };
 		51A8ECED19457F170054D280 /* ArrayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECEC19457F170054D280 /* ArrayTests.swift */; };
 		51A8ECEF19457F450054D280 /* TestsBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECEE19457F450054D280 /* TestsBase.swift */; };
-		51A8ED251945809F0054D280 /* customers.json in Resources */ = {isa = PBXBuildFile; fileRef = 51A8ECF7194580130054D280 /* customers.json */; };
+		5EDD75C01B054C5100C90DA9 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECD819457E8D0054D280 /* Array.swift */; };
+		5EDD75C11B054C5100C90DA9 /* Comparers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECD919457E8D0054D280 /* Comparers.swift */; };
+		5EDD75C21B054C5100C90DA9 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECDA19457E8D0054D280 /* Double.swift */; };
+		5EDD75C31B054C5100C90DA9 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECDB19457E8D0054D280 /* Group.swift */; };
+		5EDD75C41B054C5100C90DA9 /* Int.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECDC19457E8D0054D280 /* Int.swift */; };
+		5EDD75C51B054C5100C90DA9 /* Map.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECDD19457E8D0054D280 /* Map.swift */; };
+		5EDD75C61B054C5100C90DA9 /* NSDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECDE19457E8D0054D280 /* NSDate.swift */; };
+		5EDD75C71B054C5100C90DA9 /* Range.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECDF19457E8D0054D280 /* Range.swift */; };
+		5EDD75C81B054C5100C90DA9 /* Slice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECE019457E8D0054D280 /* Slice.swift */; };
+		5EDD75C91B054C5100C90DA9 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 51A8ECE119457E8D0054D280 /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,7 +75,6 @@
 		51A8ECE119457E8D0054D280 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		51A8ECEC19457F170054D280 /* ArrayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ArrayTests.swift; sourceTree = "<group>"; };
 		51A8ECEE19457F450054D280 /* TestsBase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestsBase.swift; sourceTree = "<group>"; };
-		51A8ECF7194580130054D280 /* customers.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = customers.json; path = "swift-linq-examples/src/LinqExamples/customers.json"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,7 +144,6 @@
 		51A8ECC919457E390054D280 /* LinqKitTests */ = {
 			isa = PBXGroup;
 			children = (
-				51A8ECF7194580130054D280 /* customers.json */,
 				51A8ECEE19457F450054D280 /* TestsBase.swift */,
 				51A8ECEC19457F170054D280 /* ArrayTests.swift */,
 				51A8ECCA19457E390054D280 /* Supporting Files */,
@@ -252,7 +259,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				51A8ED251945809F0054D280 /* customers.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,6 +286,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EDD75C01B054C5100C90DA9 /* Array.swift in Sources */,
+				5EDD75C11B054C5100C90DA9 /* Comparers.swift in Sources */,
+				5EDD75C21B054C5100C90DA9 /* Double.swift in Sources */,
+				5EDD75C31B054C5100C90DA9 /* Group.swift in Sources */,
+				5EDD75C41B054C5100C90DA9 /* Int.swift in Sources */,
+				5EDD75C51B054C5100C90DA9 /* Map.swift in Sources */,
+				5EDD75C61B054C5100C90DA9 /* NSDate.swift in Sources */,
+				5EDD75C71B054C5100C90DA9 /* Range.swift in Sources */,
+				5EDD75C81B054C5100C90DA9 /* Slice.swift in Sources */,
+				5EDD75C91B054C5100C90DA9 /* String.swift in Sources */,
 				51A8ECEF19457F450054D280 /* TestsBase.swift in Sources */,
 				51A8ECED19457F170054D280 /* ArrayTests.swift in Sources */,
 			);

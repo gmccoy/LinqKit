@@ -10,11 +10,11 @@ import Foundation
 
 extension NSDate {
     
-    convenience init(dateString:String, format:String="yyyy-MM-dd") {
+    public convenience init(dateString:String, format:String="yyyy-MM-dd") {
         let fmt = NSDateFormatter()
         fmt.timeZone = NSTimeZone.defaultTimeZone()
         fmt.dateFormat = format
-        let d = fmt.dateFromString(dateString)
+        let d = fmt.dateFromString(dateString)!
         self.init(timeInterval:0, sinceDate:d)
     }
     
@@ -24,14 +24,14 @@ extension NSDate {
         c.month = month
         c.day = day
         
-        let gregorian = NSCalendar(identifier:NSGregorianCalendar)
+        let gregorian = NSCalendar(identifier:NSCalendarIdentifierGregorian)!
         var d = gregorian.dateFromComponents(c)
-        self.init(timeInterval:0, sinceDate:d)
+        self.init(timeInterval:0, sinceDate:d!)
     }
     
     func components() -> NSDateComponents {
         let compnents  = NSCalendar.currentCalendar().components(
-            NSCalendarUnit.DayCalendarUnit | NSCalendarUnit.MonthCalendarUnit | NSCalendarUnit.YearCalendarUnit,
+            .CalendarUnitDay | .CalendarUnitMonth | .CalendarUnitYear,
             fromDate: self)
         
         return compnents

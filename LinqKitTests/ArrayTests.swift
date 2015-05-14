@@ -6,6 +6,10 @@
 //  Copyright (c) 2014 ServiceStack LLC. All rights reserved.
 //
 
+import Foundation
+import XCTest
+import LinqKit
+
 class ArrayTests: TestsBase {
 
     func testEach() {
@@ -32,7 +36,7 @@ class ArrayTests: TestsBase {
         var words = [ "believe", "relief", "receipt", "field" ]
         var iAfterE = words.any { $0.contains("ei") }
         
-        XCTAssert(isAfterE)
+        XCTAssert(iAfterE)
         
         words = [ "believe", "relief", "field" ]
         iAfterE = words.any { $0.contains("ei") }
@@ -47,7 +51,7 @@ class ArrayTests: TestsBase {
         XCTAssert(eAfterI)
         
         words = [ "believe", "relief", "receipt", "field" ]
-        eAfterI = words.any { $0.contains("ie") }
+        eAfterI = words.all { $0.contains("ie") }
         
         XCTAssert(!eAfterI)
     }
@@ -83,7 +87,7 @@ class ArrayTests: TestsBase {
         let numbers = [ 1, 2, 3, 4, 5 ]
         let under4 = numbers.takeWhile { $0 <= 3 }
         
-        XCTAssert(skip3 == [1,2,3])
+        XCTAssert(under4 == [1,2,3])
     }
     
     func testSkipWhile(){
@@ -111,17 +115,18 @@ class ArrayTests: TestsBase {
         
         XCTAssert(over4 == -1)
     }
-    
+    /*
     func testSortBy(){
         let words = [ "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY", "ClOvEr", "cHeRry" ]
         
         let sortedWords = words.sortBy(
-            { $0.length == $1.length ? 0 : $0.length > $1.length ? 1 : -1 },
-            { $0.uppercaseString.compare($1.uppercaseString) }
+            { (s1: String, s2: String) -> Int in s1.length == s2.length ? 0 : s1.length > s2.length ? 1 : -1 },
+            { (s1: String, s2: String) -> Int in s1.uppercaseString.compare(s2.uppercaseString) }
         )
         
         sortedWords == [ "BlUeBeRrY", "ClOvEr", "cHeRry", "bRaNcH", "AbAcUs",  "aPPLE"]
     }
+    */
     
     func testIndexOf(){
         let words = [ "aPPLE", "AbAcUs", "bRaNcH", "BlUeBeRrY", "ClOvEr", "cHeRry" ]
